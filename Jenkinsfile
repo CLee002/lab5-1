@@ -69,6 +69,16 @@ pipeline {
             }
         }
 
+                stage('Remove Unwanted Data') {
+            steps {
+                script {
+                    // Run the python script to generate data to add to the database
+                    def appPod = sh(script: "kubectl get pods -l app=flask -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
+                    sh "kubectl exec ${appPod} -- python3 data-clear.py"
+                }
+            }
+        }
+
         stage('Generate Test Data') {
             steps {
                 script {

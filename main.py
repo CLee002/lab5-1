@@ -16,10 +16,11 @@ def init_db():
     with app.app_context():
         db = get_db()
         db.execute('''
-            CREATE TABLE IF NOT EXISTS contacts (
+            CREATE TABLE IF NOT EXISTS contactss (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
-                phone TEXT NOT NULL
+                phone TEXT NOT NULL,
+                address TEXT NOT NULL
             );
         ''')
         db.commit()
@@ -32,23 +33,24 @@ def index():
         if request.form.get('action') == 'delete':
             contact_id = request.form.get('contact_id')
             db = get_db()
-            db.execute('DELETE FROM contacts WHERE id = ?', (contact_id,))
+            db.execute('DELETE FROM contactss WHERE id = ?', (contact_id,))
             db.commit()
             message = 'Contact deleted successfully.'
         else:
             name = request.form.get('name')
             phone = request.form.get('phone')
-            if name and phone:
+            address = request.form.get('address')
+            if name and phone and address:
                 db = get_db()
-                db.execute('INSERT INTO contacts (name, phone) VALUES (?, ?)', (name, phone))
+                db.execute('INSERT INTO contactss (name, phone, address) VALUES (?, ?, ?)', (name, phone, address))
                 db.commit()
                 message = 'Contact added successfully.'
             else:
-                message = 'Missing name or phone number.'
+                message = 'Missing name or phone number or address.'
 
     # Always display the contacts table
     db = get_db()
-    contacts = db.execute('SELECT * FROM contacts').fetchall()
+    contacts = db.execute('SELECT * FROM contactss').fetchall()
 
     # Display the HTML form along with the contacts table
     return render_template_string('''
@@ -64,20 +66,24 @@ def index():
                 <input type="text" id="name" name="name" required><br>
                 <label for="phone">Phone Number:</label><br>
                 <input type="text" id="phone" name="phone" required><br><br>
+                <label for="address">Address:</label><br>
+                <input type="text" id="address" name="address" required><br><br>
                 <input type="submit" value="Submit">
             </form>
             <p>{{ message }}</p>
-            {% if contacts %}
+            {% if contactss %}
                 <table border="1">
                     <tr>
                         <th>Name</th>
                         <th>Phone Number</th>
+                        <th>Address</th>
                         <th>Delete</th>
                     </tr>
-                    {% for contact in contacts %}
+                    {% for contact in contactss %}
                         <tr>
                             <td>{{ contact['name'] }}</td>
                             <td>{{ contact['phone'] }}</td>
+                            <td>{{ contact['address'] }}</td>
                             <td>
                                 <form method="POST" action="/">
                                     <input type="hidden" name="contact_id" value="{{ contact['id'] }}">

@@ -12,7 +12,7 @@ def clear_test_contacts():
     db = connect_db()
     # Assuming all test contacts follow a specific naming pattern
     #db.execute("DELETE FROM contacts WHERE name LIKE 'Test Name %'")
-    db.execute("DELETE FROM contacts")
+    db.execute("DELETE FROM contactss")
     db.commit()
     print('Test contacts have been deleted from the database.')
     db.close()
