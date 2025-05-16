@@ -13,6 +13,7 @@ COPY . .
 
 # Install Python dependencies
 RUN pip install -r requirements1.txt
+RUN pip install random-address
 
 # Expose port 5000 for the application
 EXPOSE 5000
