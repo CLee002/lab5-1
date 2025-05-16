@@ -18,6 +18,13 @@ pipeline {
             }
         }
 
+            stage('Lint HTML') {
+            steps {
+                sh 'npm install htmlhint --save-dev'
+                sh 'npx htmlhint *.html'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -46,6 +53,19 @@ pipeline {
                     sh "sed -i 's|${DOCKER_IMAGE}:latest|${DOCKER_IMAGE}:${IMAGE_TAG}|' deployment-dev.yaml"
                     sh "kubectl apply -f deployment-dev.yaml"
                 }
+            }
+        }
+
+                    stage ("Run Security Checks") {
+            steps {
+                //                                                                 ###change the IP address in this section to your cluster IP address!!!!####
+                sh 'docker pull public.ecr.aws/portswigger/dastardly:latest'
+                sh '''
+                    docker run --user $(id -u) -v ${WORKSPACE}:${WORKSPACE}:rw \
+                    -e BURP_START_URL=http://10.48.10.129 \
+                    -e BURP_REPORT_FILE_PATH=${WORKSPACE}/dastardly-report.xml \
+                    public.ecr.aws/portswigger/dastardly:latest
+                '''
             }
         }
 
