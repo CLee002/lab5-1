@@ -2,7 +2,7 @@ import sqlite3
 import random_address
 import os
 
-DATABASE = '/nfs/demo1.db'
+DATABASE = '/nfs/demo.db'
 
 def connect_db():
     """Connect to the SQLite database."""

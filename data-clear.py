@@ -1,7 +1,7 @@
 import sqlite3
 
 # Database file path, ensure this matches the path used in your Flask application
-DATABASE = '/nfs/demo1.db'
+DATABASE = '/nfs/demo.db'
 
 def connect_db():
     """Connect to the SQLite database."""
