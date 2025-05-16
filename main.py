@@ -79,7 +79,7 @@ def index():
                         <th>Address</th>
                         <th>Delete</th>
                     </tr>
-                    {% for contact in contactss %}
+                    {% for contact in contacts %}
                         <tr>
                             <td>{{ contact['name'] }}</td>
                             <td>{{ contact['phone'] }}</td>
