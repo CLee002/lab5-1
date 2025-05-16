@@ -71,7 +71,7 @@ def index():
                 <input type="submit" value="Submit">
             </form>
             <p>{{ message }}</p>
-            {% if contactss %}
+            {% if contacts %}
                 <table border="1">
                     <tr>
                         <th>Name</th>
